@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% comment %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+{% endblock style %}
+{% endcomment %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block main %}
+<div class="d-flex justify-content-between">
+    <div class="col-8">
+        <div class="card text-center">
+            <div class="card-header">
+                {{ article.category.title }}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <p class="card-text">{{ article.content|linebreaks|truncatewords:15 }}</p>
+                <a href="{% url 'article_update' article.pk %}" class="btn btn-success">Tahrirlash</a>
+                <a href="{% url 'article_delete' article.pk %}" class="btn btn-danger">O'chirish</a>
+            </div>
+
+            <div class="card-footer text-muted">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        {{ article.created_at }}
+                    </div>
+                    {% if article.author %}
+                    <div>
+                        <a href="{% url 'profile' article.author.pk %}">{{ article.author }}</a>
+                    </div>
+                    {% else %}
+                    <div>
+                        Author mavjud emas
+                    </div>
+                    {% endif %}
+                    <div>
+                        Ko'rishlar soni: {{ article.watched }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            {% if request.user.is_authenticated %}
+            <form action="{% url 'add_comment' article.pk %}" method="post" enctype="multipart/form-data" class="mt-5">
+                {% csrf_token %}
+                {% include 'components/_form_errors.html' %}
+                {{ comment_form }}
+                <button class="btn btn-dark" type="submit">Add comment</button>
+            </form>
+            {% endif %}
+            {% for comment in comments %}
+            <div class="card mt-2 mb-2">
+                <h5 class="card-header">{{ comment.user.username }}</h5>
+                <div class="card-body">
+                    <p class="card-text">{{ comment.text }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-3">
+        {% for arcticle in articles %}
+        <div class="card" style="width: 100%">
+            {% if article.image %}
+            <img src="{{ article.image.url }}" width="100%">
+            {% else %}
+            <img src="https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg" width="100%">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <p class="card-text">
+                    {{ article.comment }}
+                </p>
+                <a href="#" class="btn btn-primary">Batafsil</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock main %}

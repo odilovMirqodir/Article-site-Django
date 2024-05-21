@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+
+{% block main %}
+<form method="post">
+    {% csrf_token %}
+    <p><b>{{ article.title }}</b>O'chirishni xohlaysizmi ?</p>
+    <input value="Ha" type="submit" class="btn btn-danger">
+    <a href="{{ article.get_absolute_url }}" class="btn btn-success">Ortga</a>
+</form>
+{% endblock main %}

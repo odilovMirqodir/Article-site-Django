@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load blog_tags %}
+
+{% block title %}
+{% if title %}
+{{ title }}
+{% else %}
+Bosh sahifa
+{% endif %}
+{% endblock title %}
+
+
+{% block main %}
+<h1 class="mt-5 mb-5">Maqolalar ro'yxati</h1>
+<div class="d-flex justify-content-between">
+    <div class="col-3">
+        {% get_all_categories as categories %}
+        {% include 'components/_sidebar.html' %}
+    </div>
+    <div class="col-8">
+        {% for article in page_obj %}
+        {% include 'components/_card.html' %}
+        {% endfor %}
+        {% include 'components/_pagination.html' %}
+    </div>
+</div>
+{% endblock main %}

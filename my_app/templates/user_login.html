@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+
+{% block main %}
+<form method="post">
+    {% csrf_token %}
+
+    {% if request.GET.next %}
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
+    {% endif %}
+
+    {% include 'components/_form_errors.html' %}
+    <label for="{{ form.username.id_for_label }}">
+        Foydalanuvchi ismi
+    </label>
+    {{ form.username }}
+    <label for="{{ for.password.id_for_label }}">
+        Foydalanuvchi Paroli
+    </label>
+    {{ form.password }}
+    <button class="btn btn-primary" type="submit">Kirish</button>
+</form>
+{% endblock main %}
